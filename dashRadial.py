@@ -30,29 +30,13 @@ app.layout = html.Div(
                     id='deep-filter',
                     options=[
                         {'label': valor, 'value': valor}
-                        for valor in [2, 3, 4]
+                        for valor in profundidades
                     ],
                     value=3,
                     clearable=False,
                     searchable=False,
                     className='dropdown', style={'fontSize': "19px", 'textAlign': 'center', 'min-width': '65px',
                                                  'float': 'left', 'clear': 'none', 'margin-left': '5px'},
-                ),
-                html.Div(children='Orientacion del grafico: ',
-                         style={'fontSize': "19px", 'float': 'left', 'clear': 'none',
-                                'margin-left': '60px'}, className='menu-title'),
-                dcc.Dropdown(
-                    id='orientacion-filter',
-                    options=[
-                        {'label': valor, 'value': valor}
-                        for valor in orientaciones_disponibles
-                    ],
-                    value=orientaciones_disponibles[0],
-                    clearable=False,
-                    searchable=False,
-                    className='dropdown',
-                    style={'fontSize': "19px", 'textAlign': 'center', 'size': '100%', 'min-width': '160px',
-                           'float': 'left', 'clear': 'none', 'margin-left': '5px'}
                 ),
                 html.Div(children='Tamaño del texto: ',
                          style={'fontSize': "19px", 'float': 'left', 'clear': 'none',
@@ -109,14 +93,11 @@ app.layout = html.Div(
 @app.callback(
     Output("fig_update", "figure"),         # la salida es la figura actualziada
     [Input("deep-filter", "value"),         # variable para profundidad
-     Input("orientacion-filter", "value"),  # variable para la orientacion
      Input("font-filter", "value"),         # variable para el tamanno de fuente
      Input("color-filter", "value")],       # variable para la configuracion de color
 )
-def update_charts(deep, orientacion, font_size, color_config):
-    # Funcion que recibe una profundidad para ser asignada a la figura, tambie recibe una orientacion y llama una
-    # funcion para obtener el valor necesario (Horizontal -> h) y por ultimo el tipo de color a ser aplicado en el
-    # grafico
-    orientacion = tranformar_orientacion(orientacion)
-    update_fig = creacion_radial(deep, color_config, orientacion, font_size)
+def update_charts(deep, font_size, color_config):
+    # Funcion que recibe una profundidad para ser asignada a la figura, tambie recibe una orientacion
+    # y por ultimo el tipo de color a ser aplicado en el grafico
+    update_fig = creacion_radial(deep, color_config, font_size)
     return update_fig
